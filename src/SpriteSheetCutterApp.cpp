@@ -79,7 +79,7 @@ void SpriteSheetCutterApp::Draw()
 	else
 	{
 		ImGuiIO &io = ImGui::GetIO();
-		ImVec2 windowSize(300, 200); // Adjust the size as needed
+		ImVec2 windowSize(300, 200);
 		ImVec2 centerPos = ImVec2((io.DisplaySize.x - windowSize.x) * 0.5f,
 								  (io.DisplaySize.y - windowSize.y) * 0.5f);
 
@@ -104,7 +104,7 @@ void SpriteSheetCutterApp::Draw()
 			std::string selectedPath = GetFileFromDialog();
 			if (!selectedPath.empty())
 			{
-				spriteSheet = LoadTexture(selectedPath.c_str()); 
+				spriteSheet = LoadTexture(selectedPath.c_str());
 			}
 		}
 
@@ -295,10 +295,10 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 	static bool save = false;
 	static bool showInputBox = false;
 	static char destFileName[256] = "";
-	ImGui::Begin("Ultra-Accurate Sprite Sheet Splitter", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Sprite Sheet Splitter", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::Text("Sprite Sheet: %dx%d pixels", spriteSheet.width, spriteSheet.height);
-	ImGui::SameLine(0.0f, 80.0f);
+	ImGui::SameLine(0.0f, 90.0f);
 	if (ImGui::Button("Load new SpriteSheet"))
 	{
 		std::string selectedPath = GetFileFromDialog();
