@@ -173,7 +173,7 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	Rectangle highlight = {x, y, gridX, gridY};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
-	
+
 	float markerSize = 8.0f;
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x + gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
@@ -376,6 +376,6 @@ SpriteSheetCutterApp::~SpriteSheetCutterApp()
 
 	if (spriteSheet.id != 0)
 		UnloadTexture(spriteSheet);
-		
+
 	CloseWindow();
 }
