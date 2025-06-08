@@ -78,14 +78,37 @@ void SpriteSheetCutterApp::Draw()
 	}
 	else
 	{
+		ImGuiIO &io = ImGui::GetIO();
+		ImVec2 windowSize(300, 200); // Adjust the size as needed
+		ImVec2 centerPos = ImVec2((io.DisplaySize.x - windowSize.x) * 0.5f,
+								  (io.DisplaySize.y - windowSize.y) * 0.5f);
+
+		ImGui::SetNextWindowPos(centerPos, ImGuiCond_Always);
+		ImGui::SetNextWindowSize(windowSize, ImGuiCond_Always);
+
+		ImGui::Begin("Startup Menu", nullptr,
+					 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));
+		ImGui::TextWrapped("Select image from your pc");
+		ImGui::NewLine();
+		ImGui::TextWrapped("Choose only (.png, .jpg, .jpeg, .bmp )");
+		ImGui::PopStyleColor();
+
+		ImGui::NewLine();
+		ImGui::NewLine();
+		ImGui::NewLine();
+		ImGui::SameLine(0.0f, 100.0f);
 		if (ImGui::Button("Load Sprite"))
 		{
 			std::string selectedPath = GetFileFromDialog();
 			if (!selectedPath.empty())
 			{
-				spriteSheet = LoadTexture(texturePath.c_str());
+				spriteSheet = LoadTexture(selectedPath.c_str()); 
 			}
 		}
+
+		ImGui::End();
 
 		if (!texturePath.empty() && spriteSheet.id == 0)
 		{
