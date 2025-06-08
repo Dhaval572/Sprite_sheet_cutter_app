@@ -31,9 +31,9 @@ struct CellSelection
 
 struct DisplaySettings
 {
+    Vector2 position = {50, 50};
     float scale = 1.0f;
     float previewScale = 1.0f;
-    Vector2 position = {50, 50};
     bool snapToPixels = true;
     bool showCellInfo = true;
 };
@@ -53,12 +53,12 @@ private:
     CellSelection selection;
     bool exportFailed;
 
+    Rectangle GetFrameRect(int row, int col, float frameW, float frameH);
+    std::string GetFileFromDialog();
     void Update();
     void Draw();
     void RenderUI(float frameW, float frameH);
     void ExportAllFrames(char *destFileName);
-    Rectangle GetFrameRect(int row, int col, float frameW, float frameH);
-    std::string GetFileFromDialog();
     void DrawGridOverlay(float frameW, float frameH);
     void DrawCellHighlight(float sheetW, float sheetH);
     void DrawEnlargedPreview(float frameW, float frameH);
