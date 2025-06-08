@@ -171,17 +171,10 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	}
 
 	Rectangle highlight = {x, y, gridX, gridY};
-	static float alpha = 0.0f;
 
-	alpha += 0.05f;
-	if (alpha > 1.0f)
-		alpha = 0.0f;
-
-	DrawRectangleRec(highlight, Color{255, 0, 0, static_cast<unsigned char>(50 + 50 * sinf(alpha * 6.28f))});
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
-
+	
 	float markerSize = 8.0f;
-
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x + gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y + gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
@@ -380,7 +373,9 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 SpriteSheetCutterApp::~SpriteSheetCutterApp()
 {
 	rlImGuiShutdown();
+
 	if (spriteSheet.id != 0)
 		UnloadTexture(spriteSheet);
+		
 	CloseWindow();
 }
