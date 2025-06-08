@@ -6,7 +6,6 @@
 #include <cmath>
 #include <algorithm>
 #include <filesystem>
-#include <format>
 #include <tinyfiledialogs.h>
 #include "ImGuiCustomTheme.h"
 namespace fs = std::filesystem;
@@ -17,10 +16,10 @@ inline constexpr auto f2i = [](float f)
 
 struct GridSettings
 {
+    float lineThickness = 1.0f;
     int rows = 1;
     int columns = 1;
     bool showGrid = true;
-    float lineThickness = 1.0f;
 };
 
 struct CellSelection

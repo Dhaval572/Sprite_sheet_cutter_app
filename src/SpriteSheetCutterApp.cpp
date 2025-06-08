@@ -33,6 +33,7 @@ void SpriteSheetCutterApp::run()
 	SetTargetFPS(120);
 	rlImGuiSetup(true);
 	ImCustomTheme();
+	
 	while (!WindowShouldClose())
 	{
 		Update();
@@ -180,8 +181,6 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
 
 	float markerSize = 8.0f;
-
-	// Alternative of too much type casting
 
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x + gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
