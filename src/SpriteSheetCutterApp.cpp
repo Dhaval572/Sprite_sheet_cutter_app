@@ -1,4 +1,4 @@
-#include "SpriteSheetCutterApp.hpp"
+#include "SpriteSheetCutterApp.h"
 
 SpriteSheetCutterApp::SpriteSheetCutterApp()
 {
@@ -33,7 +33,7 @@ void SpriteSheetCutterApp::run()
 	SetTargetFPS(120);
 	rlImGuiSetup(true);
 	ImCustomTheme();
-	
+
 	while (!WindowShouldClose())
 	{
 		Update();

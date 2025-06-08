@@ -1,4 +1,4 @@
-#include "SpriteSheetCutterApp.hpp"
+#include "SpriteSheetCutterApp.h"
 
 int main()
 {
