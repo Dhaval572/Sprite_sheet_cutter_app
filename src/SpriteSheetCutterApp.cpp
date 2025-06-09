@@ -279,7 +279,7 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frameW), static_cast<float>(frameH));
 			Image frameImage = ImageFromImage(fullImage, cropRect);
 
-			std::string filename = folderPath + "/" + destFileName + (frameIdx < 10 ? "0" : "") + std::to_string(frameIdx) + ".png";
+			std::string filename = folderPath + "/" + destFileName + "(" + std::to_string(frameIdx) + ").png";
 
 			ExportImage(frameImage, filename.c_str());
 			UnloadImage(frameImage);
