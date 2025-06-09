@@ -29,7 +29,7 @@ std::string SpriteSheetCutterApp::GetFileFromDialog()
 void SpriteSheetCutterApp::run()
 {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-	InitWindow(1200, 700, "Ultra-Accurate Sprite Sheet Splitter");
+	InitWindow(1200, 700, "Sprite Sheet Splitter");
 	SetTargetFPS(120);
 	rlImGuiSetup(true);
 	ImCustomTheme();
