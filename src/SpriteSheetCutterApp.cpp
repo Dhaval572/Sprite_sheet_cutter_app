@@ -87,7 +87,7 @@ void SpriteSheetCutterApp::Draw()
 		ImGui::SetNextWindowSize(windowSize, ImGuiCond_Always);
 
 		ImGui::Begin("Startup Menu", nullptr,
-					 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+					 ImGuiWindowFlags_NoResize);
 
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));
 		ImGui::TextWrapped("Select image from your pc");
@@ -112,7 +112,7 @@ void SpriteSheetCutterApp::Draw()
 
 		if (!texturePath.empty() && spriteSheet.id == 0)
 		{
-			ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to load texture! Only Choose Image files");
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to load texture!\n Please select an image file only.");
 			ImGui::Text("Path: %s", texturePath.c_str());
 		}
 	}
@@ -279,7 +279,7 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frameW), static_cast<float>(frameH));
 			Image frameImage = ImageFromImage(fullImage, cropRect);
 
-			std::string filename = folderPath + "/" + destFileName + "(" + std::to_string(frameIdx) + ").png";
+			std::string filename = folderPath + "/" + destFileName + "_(" + std::to_string(frameIdx) + ").png";
 
 			ExportImage(frameImage, filename.c_str());
 			UnloadImage(frameImage);

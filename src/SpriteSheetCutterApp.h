@@ -46,8 +46,8 @@ public:
     void run();
 
 private:
-    std::string texturePath;
     Texture2D spriteSheet{};
+    std::string texturePath;
     GridSettings grid;
     DisplaySettings display;
     CellSelection selection;
