@@ -79,7 +79,7 @@ void SpriteSheetCutterApp::Draw()
 	else
 	{
 		ImGuiIO &io = ImGui::GetIO();
-		ImVec2 windowSize(300, 200);
+		ImVec2 windowSize(300, 220);
 		ImVec2 centerPos = ImVec2((io.DisplaySize.x - windowSize.x) * 0.5f,
 								  (io.DisplaySize.y - windowSize.y) * 0.5f);
 
@@ -98,7 +98,7 @@ void SpriteSheetCutterApp::Draw()
 		ImGui::NewLine();
 		ImGui::NewLine();
 		ImGui::NewLine();
-		ImGui::SameLine(0.0f, 100.0f);
+		ImGui::SameLine(0.0f, 90.0f);
 		if (ImGui::Button("Load Sprite"))
 		{
 			std::string selectedPath = GetFileFromDialog();
@@ -139,7 +139,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	for (uint8_t c = 0; c <= grid.columns; c++)
 	{
 		float x = display.position.x + c * gridX;
-		
+
 		if (display.snapToPixels)
 			x = roundf(x);
 
@@ -157,7 +157,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 			y = roundf(y);
 
 		float thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
-		
+
 		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
 		DrawLineEx({display.position.x, y}, {display.position.x + displayW, y}, thickness, color);
 	}
@@ -246,7 +246,7 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 	{
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to load image for export!");
 		ImGui::Text("Check if the file exists at:\n%s", texturePath.c_str());
-		
+
 		ImGui::Separator();
 		if (ImGui::Button("OK"))
 		{
@@ -368,7 +368,7 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 		display.scale = std::min(maxW / spriteSheet.width, maxH / spriteSheet.height);
 		display.position = {50, 50};
 	}
-	
+
 	ImGui::SameLine(0.0f, 60.0f);
 	if (ImGui::Button("Save All Frames"))
 	{
