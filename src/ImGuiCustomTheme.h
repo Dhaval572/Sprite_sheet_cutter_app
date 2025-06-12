@@ -9,7 +9,6 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 	rlImGuiReloadFonts();
 
 	ImGuiStyle &style = ImGui::GetStyle();
-
 	// Deep black background colors
 	style.Colors[ImGuiCol_WindowBg] = ImVec4(0.02f, 0.02f, 0.02f, 1.0f);
 	style.Colors[ImGuiCol_ChildBg] = ImVec4(0.05f, 0.05f, 0.05f, 1.0f);
@@ -22,7 +21,7 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 
 	// button styling
 	style.Colors[ImGuiCol_Button] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);		  // Dark gray
-	style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.35f, 0.35f, 0.35f, 1.0f); // Lighter on hover
+	style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.35f, 0.35f, 0.35f, 1.0f); // Lighter
 	style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);  // Darker when pressed
 
 	// Headers
