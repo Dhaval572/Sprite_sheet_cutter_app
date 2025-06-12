@@ -32,7 +32,7 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 
 	// Title bar
 	style.Colors[ImGuiCol_TitleBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.0f);
-	style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.08f, 0.08f, 0.08f, 1.0f);
+	style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);
 	style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 1.0f);
 
 	// Scrollbars
@@ -54,11 +54,11 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 	style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.30f, 0.30f, 0.30f, 0.43f);
 
 	// Borders and separators
-	style.Colors[ImGuiCol_Border] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);
+	style.Colors[ImGuiCol_Border] = ImVec4(0.45f, 0.45f, 0.45f, 1.0f);
 	style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-	style.Colors[ImGuiCol_Separator] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);
-	style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);
-	style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.35f, 0.35f, 0.35f, 1.0f);
+	style.Colors[ImGuiCol_Separator] = ImVec4(0.50f, 0.50f, 0.50f, 1.0f);
+	style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.70f, 0.70f, 0.70f, 1.0f);
+	style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.90f, 0.90f, 0.90f, 1.0f);
 
 	// Menu bar
 	style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.02f, 0.02f, 0.02f, 1.0f);
@@ -109,9 +109,9 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 
 	// Perfect border sizing
 	style.WindowBorderSize = 0.0f;
-	style.ChildBorderSize = 1.0f;
-	style.PopupBorderSize = 1.0f;
-	style.FrameBorderSize = 0.0f;
+	style.ChildBorderSize = 0.5f;
+	style.PopupBorderSize = 0.5f;
+	style.FrameBorderSize = 0.05f;
 	style.TabBorderSize = 0.0f;
 
 	// Window behavior
@@ -126,7 +126,7 @@ inline void ImCustomTheme(const std::string &path = "assets/Font/Roboto-Regular.
 	style.AntiAliasedLinesUseTex = true;
 	style.AntiAliasedFill = true;
 
-	// Resize grip 
+	// Resize grip (corner handle)
 	style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.25f, 0.25f, 0.25f, 1.0f);		  // Normal
 	style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.35f, 0.35f, 0.35f, 1.0f); // On hover
 	style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.0f);  // On active drag
