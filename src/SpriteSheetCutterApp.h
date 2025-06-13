@@ -11,7 +11,7 @@
 namespace fs = std::filesystem;
 
 // For make typecasting easy
-constexpr auto f2i = [](float f)
+constexpr auto f2i = [&](float f)
 	{ return static_cast<int>(f); };
 
 struct GridSettings
