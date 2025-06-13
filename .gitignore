@@ -21,3 +21,7 @@ out
 .vs/Sprite_sheet_cutter_app/v17/ipch/AutoPCH/7b8c1957487c97c2/SPRITESHEETCUTTERAPP.ipch
 .vs/Sprite_sheet_cutter_app/v17/ipch/AutoPCH/eed6948fc15a0797/SPRITESHEETCUTTERAPP.ipch
 *.vsidx
+.vs/slnx.sqlite
+.vs/Sprite_sheet_cutter_app/CopilotIndices/17.14.734.62261/SemanticSymbols.db
+.vs/Sprite_sheet_cutter_app/v17/Browse.VC.db
+*.db
