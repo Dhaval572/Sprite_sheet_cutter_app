@@ -6,3 +6,4 @@ build
 .vs
 out
 *.db
+.vs/Sprite_sheet_cutter_app/v17/Browse.VC.db
