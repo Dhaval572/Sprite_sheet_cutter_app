@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.27)
 project(Sprite_sheet_cutter)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_EXTENSIONS ON)
 
 # Try to find a locally installed raylib
 find_package(raylib 5.5 QUIET)
