@@ -285,10 +285,10 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 	ImGui::SliderFloat("Grid Line Thickness", &grid.lineThickness, 0.5f, 5.0f);
 
 	if (ImGui::InputInt("Rows", &grid.rows))
-		grid.rows = std::max(1, grid.rows);
+		grid.rows = std::clamp(grid.rows, 1, 100);
 
 	if (ImGui::InputInt("Columns", &grid.columns))
-		grid.columns = std::max(1, grid.columns);
+		grid.columns = std::clamp(grid.columns, 1, 100);
 
 	ImGui::Checkbox("Show Grid", &grid.showGrid);
 	ImGui::SliderFloat("Main Scale", &display.scale, 1.0f, 3.0f);
