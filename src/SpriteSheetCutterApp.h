@@ -34,7 +34,6 @@ struct DisplaySettings
 	Vector2 position = { 50, 50 };
 	float scale = 1.0f;
 	float previewScale = 1.0f;
-	bool snapToPixels = true;
 	bool showCellInfo = true;
 };
 
