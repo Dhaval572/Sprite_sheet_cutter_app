@@ -36,17 +36,7 @@ void SpriteSheetCutterApp::run()
 
 	while (!WindowShouldClose())
 	{
-		Update();
 		Draw();
-	}
-}
-
-void SpriteSheetCutterApp::Update()
-{
-	if (display.snapToPixels)
-	{
-		display.position.x = floorf(display.position.x);
-		display.position.y = floorf(display.position.y);
 	}
 }
 
@@ -140,9 +130,6 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	{
 		float x = display.position.x + c * gridX;
 
-		if (display.snapToPixels)
-			x = roundf(x);
-
 		float thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
@@ -152,9 +139,6 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	for (uint8_t r = 0; r <= grid.rows; r++)
 	{
 		float y = display.position.y + r * gridY;
-
-		if (display.snapToPixels)
-			y = roundf(y);
 
 		float thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
 
@@ -187,14 +171,6 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	float x = display.position.x + selection.col * gridX;
 	float y = display.position.y + selection.row * gridY;
 
-	if (display.snapToPixels)
-	{
-		x = roundf(x);
-		y = roundf(y);
-		gridX = roundf(gridX);
-		gridY = roundf(gridY);
-	}
-
 	Rectangle highlight = {x, y, gridX, gridY};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
@@ -213,14 +189,6 @@ void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
 	float previewH = frameH * display.previewScale;
 	float previewX = GetScreenWidth() - previewW - 50;
 	float previewY = GetScreenHeight() - previewH - 50;
-
-	if (display.snapToPixels)
-	{
-		previewX = roundf(previewX);
-		previewY = roundf(previewY);
-		previewW = roundf(previewW);
-		previewH = roundf(previewH);
-	}
 
 	Rectangle dest = {previewX, previewY, previewW, previewH};
 	DrawRectangleRec(dest, Color{0, 0, 0, 200});
@@ -270,11 +238,10 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 		return;
 
 	std::string fullPath = savePath;
-	size_t lastSlash = fullPath.find_last_of("/\\");
+	int lastSlash = fullPath.find_last_of("/\\");
 	std::string folderPath = (lastSlash == std::string::npos) ? "." : fullPath.substr(0, lastSlash);
 
 	uint8_t frameIdx = 0;
-
 	for (uint8_t r = 0; r < grid.rows; r++)
 	{
 		for (uint8_t c = 0; c < grid.columns; c++)
@@ -299,9 +266,8 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 	static bool showInputBox = false;
 	static char destFileName[256] = "";
 	ImGui::Begin("Sprite Sheet Splitter", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-
 	ImGui::Text("Sprite Sheet: %dx%d pixels", spriteSheet.width, spriteSheet.height);
-	ImGui::SameLine(0.0f, 90.0f);
+	ImGui::SameLine(0.0f, 120.0f);
 	if (ImGui::Button("Load new SpriteSheet"))
 	{
 		std::string selectedPath = GetFileFromDialog();
@@ -315,9 +281,6 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 			spriteSheet = LoadTexture(texturePath.c_str());
 		}
 	}
-
-	ImGui::Checkbox("Snap to Pixels", &display.snapToPixels);
-	ImGui::SameLine();
 	ImGui::Checkbox("Show Cell Info", &display.showCellInfo);
 	ImGui::SliderFloat("Grid Line Thickness", &grid.lineThickness, 0.5f, 5.0f);
 
