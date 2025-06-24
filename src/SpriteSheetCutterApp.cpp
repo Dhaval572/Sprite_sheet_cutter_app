@@ -322,7 +322,7 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 		display.scale = 1.0f;
 	}
 
-	ImGui::SameLine(0.0f, 60.0f);
+	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Fit to Window"))
 	{
 		float maxW = static_cast<float>(GetScreenWidth()) - 400.0f;
@@ -332,7 +332,7 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 		display.position = {50, 50};
 	}
 
-	ImGui::SameLine(0.0f, 60.0f);
+	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Save All Frames"))
 	{
 		showInputBox = true;
