@@ -119,8 +119,8 @@ Rectangle SpriteSheetCutterApp::GetFrameRect(int row, int col, float frameW, flo
 void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 {
 	if (!grid.showGrid || grid.rows < 1 || grid.columns < 1)
-	return;
-	
+		return;
+
 	float x, y, cellNumber, thickness;
 	frame.displayW = spriteSheet.width * display.scale;
 	frame.displayH = spriteSheet.height * display.scale;
@@ -146,7 +146,6 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
 		DrawLineEx({display.position.x, y}, {display.position.x + frame.displayW, y}, thickness, color);
 	}
-
 
 	if (display.showCellInfo)
 	{
@@ -324,7 +323,6 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 		display.scale = 1.0f;
 	}
 
-	
 	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Fit to Window"))
 	{
