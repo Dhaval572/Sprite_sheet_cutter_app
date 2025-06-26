@@ -27,6 +27,7 @@ struct CellSelection
 	int row = 0;
 	int col = 0;
 	int index = 0;
+	int totalCells;
 };
 
 struct DisplaySettings

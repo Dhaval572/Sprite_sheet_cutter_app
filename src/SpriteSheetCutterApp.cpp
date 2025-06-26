@@ -42,8 +42,8 @@ void SpriteSheetCutterApp::run()
 
 void SpriteSheetCutterApp::Draw()
 {
-	float frameW = spriteSheet.width / static_cast<float>(grid.columns);
-	float frameH = spriteSheet.height / static_cast<float>(grid.rows);
+	frame.width = spriteSheet.width / static_cast<float>(grid.columns);
+	frame.height = spriteSheet.height / static_cast<float>(grid.rows);
 
 	BeginDrawing();
 	ClearBackground(GRAY);
@@ -55,16 +55,16 @@ void SpriteSheetCutterApp::Draw()
 					   {display.position.x, display.position.y, spriteSheet.width * display.scale, spriteSheet.height * display.scale},
 					   {0, 0}, 0.0f, WHITE);
 
-		DrawGridOverlay(frameW, frameH);
-		DrawCellHighlight(frameW, frameH);
-		DrawEnlargedPreview(frameW, frameH);
+		DrawGridOverlay(frame.width, frame.height);
+		DrawCellHighlight(frame.width, frame.height);
+		DrawEnlargedPreview(frame.width, frame.height);
 	}
 
 	rlImGuiBegin();
 
 	if (spriteSheet.id != 0)
 	{
-		RenderUI(frameW, frameH);
+		RenderUI(frame.width, frame.height);
 	}
 	else
 	{
@@ -225,8 +225,8 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 		ImGui::EndPopup();
 	}
 
-	int frameW = spriteSheet.width / grid.columns;
-	int frameH = spriteSheet.height / grid.rows;
+	frame.width = spriteSheet.width / grid.columns;
+	frame.height = spriteSheet.height / grid.rows;
 
 	const char *savePath = tinyfd_saveFileDialog(
 		"Select folder by saving a dummy file",
@@ -247,7 +247,7 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 	{
 		for (int c = 0; c < grid.columns; c++)
 		{
-			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frameW), static_cast<float>(frameH));
+			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frame.width), static_cast<float>(frame.height));
 			Image frameImage = ImageFromImage(fullImage, cropRect);
 
 			std::string filename = folderPath + "/" + destFileName + "_(" + std::to_string(frameIdx) + ").png";
@@ -296,12 +296,12 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 	ImGui::SliderFloat("Preview Scale", &display.previewScale, 1.0f, 10.0f);
 	ImGui::DragFloat2("Position", (float *)&display.position, 1.0f, 0.0f, 0.0f, "%.1f");
 
-	int totalCells = grid.rows * grid.columns;
-	selection.index = std::clamp(selection.index, 0, totalCells - 1);
+	selection.totalCells = grid.rows * grid.columns;
+	selection.index = std::clamp(selection.index, 0, selection.totalCells - 1);
 	selection.row = selection.index / grid.columns;
 	selection.col = selection.index % grid.columns;
 
-	if (ImGui::SliderInt("Select Cell", &selection.index, 0, totalCells - 1))
+	if (ImGui::SliderInt("Select Cell", &selection.index, 0, selection.totalCells - 1))
 	{
 		selection.row = selection.index / grid.columns;
 		selection.col = selection.index % grid.columns;
