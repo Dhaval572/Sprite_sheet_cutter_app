@@ -119,19 +119,19 @@ Rectangle SpriteSheetCutterApp::GetFrameRect(int row, int col, float frameW, flo
 void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 {
 	if (!grid.showGrid || grid.rows < 1 || grid.columns < 1)
-		return;
-
+	return;
+	
+	float x, y, cellNumber, thickness;
 	frame.displayW = spriteSheet.width * display.scale;
 	frame.displayH = spriteSheet.height * display.scale;
 	frame.gridX = frame.displayW / grid.columns;
 	frame.gridY = frame.displayH / grid.rows;
 
-	float x, y;
 	for (int c = 0; c <= grid.columns; c++)
 	{
 		x = display.position.x + c * frame.gridX;
 
-		float thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
+		thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
 		DrawLineEx({x, display.position.y}, {x, display.position.y + frame.displayH}, thickness, color);
@@ -141,11 +141,12 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	{
 		y = display.position.y + r * frame.gridY;
 
-		float thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
+		thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
 		DrawLineEx({display.position.x, y}, {display.position.x + frame.displayW, y}, thickness, color);
 	}
+
 
 	if (display.showCellInfo)
 	{
@@ -153,9 +154,9 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		{
 			for (int c = 0; c < grid.columns; c++)
 			{
-				int cellNumber = r * grid.columns + c;
-				float x = display.position.x + c * frame.gridX + 5;
-				float y = display.position.y + r * frame.gridY + 5;
+				cellNumber = r * grid.columns + c;
+				x = display.position.x + c * frame.gridX + 5;
+				y = display.position.y + r * frame.gridY + 5;
 				DrawText(TextFormat("%d", cellNumber), f2i(x), f2i(y), 12, LIGHTGRAY);
 			}
 		}
@@ -186,11 +187,12 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 
 void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
 {
+	float previewW, previewH, previewX, previewY;
 	Rectangle src = GetFrameRect(selection.row, selection.col, frameW, frameH);
-	float previewW = frameW * display.previewScale;
-	float previewH = frameH * display.previewScale;
-	float previewX = GetScreenWidth() - previewW - 50;
-	float previewY = GetScreenHeight() - previewH - 50;
+	previewW = frameW * display.previewScale;
+	previewH = frameH * display.previewScale;
+	previewX = GetScreenWidth() - previewW - 50;
+	previewY = GetScreenHeight() - previewH - 50;
 
 	Rectangle dest = {previewX, previewY, previewW, previewH};
 	DrawRectangleRec(dest, Color{0, 0, 0, 200});
@@ -263,6 +265,7 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 
 void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 {
+	float maxW, maxH;
 	static bool save = false;
 	static bool showInputBox = false;
 	static char destFileName[256] = "";
@@ -323,11 +326,12 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 		display.scale = 1.0f;
 	}
 
+	
 	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Fit to Window"))
 	{
-		float maxW = static_cast<float>(GetScreenWidth()) - 400.0f;
-		float maxH = static_cast<float>(GetScreenHeight()) - 150.0f;
+		maxW = static_cast<float>(GetScreenWidth()) - 400.0f;
+		maxH = static_cast<float>(GetScreenHeight()) - 150.0f;
 
 		display.scale = std::min(maxW / spriteSheet.width, maxH / spriteSheet.height);
 		display.position = {50, 50};
