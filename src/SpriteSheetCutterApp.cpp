@@ -121,7 +121,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	if (!grid.showGrid || grid.rows < 1 || grid.columns < 1)
 		return;
 
-	float x, y, cellNumber, thickness;
+	float x, y, thickness;
 	frame.displayW = spriteSheet.width * display.scale;
 	frame.displayH = spriteSheet.height * display.scale;
 	frame.gridX = frame.displayW / grid.columns;
@@ -147,6 +147,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		DrawLineEx({display.position.x, y}, {display.position.x + frame.displayW, y}, thickness, color);
 	}
 
+	int cellNumber;
 	if (display.showCellInfo)
 	{
 		for (int r = 0; r < grid.rows; r++)
@@ -341,7 +342,7 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 
 	if (showInputBox)
 	{
-		ImGui::InputText("Name of the file:", destFileName, IM_ARRAYSIZE(destFileName));
+		ImGui::InputText("Name of the file: ", destFileName, IM_ARRAYSIZE(destFileName));
 
 		if (ImGui::Button("Confirm Save"))
 		{
