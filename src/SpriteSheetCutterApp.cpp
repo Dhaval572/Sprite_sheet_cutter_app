@@ -205,10 +205,9 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 	if (fullImage.data == nullptr)
 	{
 		exportFailed = true;
-	}
-
-	if (exportFailed)
 		ImGui::OpenPopup("Export Failed");
+		return;
+	}
 
 	if (ImGui::BeginPopupModal("Export Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
