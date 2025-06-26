@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 
 // For make typecasting easy
 constexpr auto f2i = [](float f)
-	{ return static_cast<int>(f); };
+{ return static_cast<int>(f); };
 
 struct GridSettings
 {
@@ -31,10 +31,20 @@ struct CellSelection
 
 struct DisplaySettings
 {
-	Vector2 position = { 50, 50 };
+	Vector2 position = {50, 50};
 	float scale = 1.0f;
 	float previewScale = 1.0f;
 	bool showCellInfo = true;
+};
+
+struct FrameSize
+{
+	float width;
+	float height;
+	float displayW;
+	float displayH;
+	float gridX;
+	float gridY;
 };
 
 class SpriteSheetCutterApp
@@ -50,13 +60,14 @@ private:
 	GridSettings grid;
 	DisplaySettings display;
 	CellSelection selection;
+	FrameSize frame;
 	bool exportFailed;
 
 	Rectangle GetFrameRect(int row, int col, float frameW, float frameH);
 	std::string GetFileFromDialog();
 	void Draw();
 	void RenderUI(float frameW, float frameH);
-	void ExportAllFrames(char* destFileName);
+	void ExportAllFrames(char *destFileName);
 	void DrawGridOverlay(float frameW, float frameH);
 	void DrawCellHighlight(float sheetW, float sheetH);
 	void DrawEnlargedPreview(float frameW, float frameH);

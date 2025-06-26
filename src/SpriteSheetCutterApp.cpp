@@ -121,29 +121,29 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	if (!grid.showGrid || grid.rows < 1 || grid.columns < 1)
 		return;
 
-	float displayW = spriteSheet.width * display.scale;
-	float displayH = spriteSheet.height * display.scale;
-	float gridX = displayW / grid.columns;
-	float gridY = displayH / grid.rows;
+	frame.displayW = spriteSheet.width * display.scale;
+	frame.displayH = spriteSheet.height * display.scale;
+	frame.gridX = frame.displayW / grid.columns;
+	frame.gridY = frame.displayH / grid.rows;
 
 	for (int c = 0; c <= grid.columns; c++)
 	{
-		float x = display.position.x + c * gridX;
+		float x = display.position.x + c * frame.gridX;
 
 		float thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
-		DrawLineEx({x, display.position.y}, {x, display.position.y + displayH}, thickness, color);
+		DrawLineEx({x, display.position.y}, {x, display.position.y + frame.displayH}, thickness, color);
 	}
 
 	for (int r = 0; r <= grid.rows; r++)
 	{
-		float y = display.position.y + r * gridY;
+		float y = display.position.y + r * frame.gridY;
 
 		float thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
-		DrawLineEx({display.position.x, y}, {display.position.x + displayW, y}, thickness, color);
+		DrawLineEx({display.position.x, y}, {display.position.x + frame.displayW, y}, thickness, color);
 	}
 
 	if (display.showCellInfo)
@@ -153,8 +153,8 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 			for (int c = 0; c < grid.columns; c++)
 			{
 				int cellNumber = r * grid.columns + c;
-				float x = display.position.x + c * gridX + 5;
-				float y = display.position.y + r * gridY + 5;
+				float x = display.position.x + c * frame.gridX + 5;
+				float y = display.position.y + r * frame.gridY + 5;
 				DrawText(TextFormat("%d", cellNumber), f2i(x), f2i(y), 12, LIGHTGRAY);
 			}
 		}
@@ -166,20 +166,20 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	if (grid.rows <= 0 || grid.columns <= 0)
 		return;
 
-	float gridX = (spriteSheet.width * display.scale) / grid.columns;
-	float gridY = (spriteSheet.height * display.scale) / grid.rows;
-	float x = display.position.x + selection.col * gridX;
-	float y = display.position.y + selection.row * gridY;
+	frame.gridX = (spriteSheet.width * display.scale) / grid.columns;
+	frame.gridY = (spriteSheet.height * display.scale) / grid.rows;
+	float x = display.position.x + selection.col * frame.gridX;
+	float y = display.position.y + selection.row * frame.gridY;
 
-	Rectangle highlight = {x, y, gridX, gridY};
+	Rectangle highlight = {x, y, frame.gridX, frame.gridY};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
 
 	float markerSize = 8.0f;
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x + gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x - markerSize / 2), f2i(y + gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x + gridX - markerSize / 2), f2i(y + gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
+	DrawRectangle(f2i(x + frame.gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
+	DrawRectangle(f2i(x - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
+	DrawRectangle(f2i(x + frame.gridX - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 }
 
 void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
