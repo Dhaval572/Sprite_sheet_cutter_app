@@ -165,7 +165,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 
 void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 {
-	float x, y;
+	float x, y, markerSize = 8.0f;
 	if (grid.rows <= 0 || grid.columns <= 0)
 		return;
 
@@ -177,8 +177,6 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	Rectangle highlight = {x, y, frame.gridX, frame.gridY};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
-
-	float markerSize = 8.0f;
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x + frame.gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
 	DrawRectangle(f2i(x - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
