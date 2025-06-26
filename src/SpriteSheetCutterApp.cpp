@@ -126,7 +126,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	float gridX = displayW / grid.columns;
 	float gridY = displayH / grid.rows;
 
-	for (uint8_t c = 0; c <= grid.columns; c++)
+	for (int c = 0; c <= grid.columns; c++)
 	{
 		float x = display.position.x + c * gridX;
 
@@ -136,7 +136,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		DrawLineEx({x, display.position.y}, {x, display.position.y + displayH}, thickness, color);
 	}
 
-	for (uint8_t r = 0; r <= grid.rows; r++)
+	for (int r = 0; r <= grid.rows; r++)
 	{
 		float y = display.position.y + r * gridY;
 
@@ -148,9 +148,9 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 
 	if (display.showCellInfo)
 	{
-		for (uint8_t r = 0; r < grid.rows; r++)
+		for (int r = 0; r < grid.rows; r++)
 		{
-			for (uint8_t c = 0; c < grid.columns; c++)
+			for (int c = 0; c < grid.columns; c++)
 			{
 				int cellNumber = r * grid.columns + c;
 				float x = display.position.x + c * gridX + 5;
@@ -241,10 +241,10 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 	int lastSlash = fullPath.find_last_of("/\\");
 	std::string folderPath = (lastSlash == std::string::npos) ? "." : fullPath.substr(0, lastSlash);
 
-	uint8_t frameIdx = 0;
-	for (uint8_t r = 0; r < grid.rows; r++)
+	int frameIdx = 0;
+	for (int r = 0; r < grid.rows; r++)
 	{
-		for (uint8_t c = 0; c < grid.columns; c++)
+		for (int c = 0; c < grid.columns; c++)
 		{
 			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frameW), static_cast<float>(frameH));
 			Image frameImage = ImageFromImage(fullImage, cropRect);
