@@ -126,9 +126,10 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 	frame.gridX = frame.displayW / grid.columns;
 	frame.gridY = frame.displayH / grid.rows;
 
+	float x, y;
 	for (int c = 0; c <= grid.columns; c++)
 	{
-		float x = display.position.x + c * frame.gridX;
+		x = display.position.x + c * frame.gridX;
 
 		float thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
 
@@ -138,7 +139,7 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 
 	for (int r = 0; r <= grid.rows; r++)
 	{
-		float y = display.position.y + r * frame.gridY;
+		y = display.position.y + r * frame.gridY;
 
 		float thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
 
@@ -163,13 +164,14 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 
 void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 {
+	float x, y;
 	if (grid.rows <= 0 || grid.columns <= 0)
 		return;
 
 	frame.gridX = (spriteSheet.width * display.scale) / grid.columns;
 	frame.gridY = (spriteSheet.height * display.scale) / grid.rows;
-	float x = display.position.x + selection.col * frame.gridX;
-	float y = display.position.y + selection.row * frame.gridY;
+	x = display.position.x + selection.col * frame.gridX;
+	y = display.position.y + selection.row * frame.gridY;
 
 	Rectangle highlight = {x, y, frame.gridX, frame.gridY};
 
