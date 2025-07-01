@@ -10,13 +10,15 @@ std::string SpriteSheetCutterApp::GetFileFromDialog()
 {
 	static const char *fileTypes[] = {"*.png", "*.jpg", "*.jpeg", "*.bmp"};
 
-	const char *result = tinyfd_openFileDialog(
+	const char *result = tinyfd_openFileDialog
+	(
 		"Select an image",
 		"",
 		4,
 		fileTypes,
 		"Image files",
-		0);
+		0
+	);
 
 	if (result != nullptr)
 	{
@@ -76,8 +78,7 @@ void SpriteSheetCutterApp::Draw()
 		ImGui::SetNextWindowPos(centerPos, ImGuiCond_Always);
 		ImGui::SetNextWindowSize(windowSize, ImGuiCond_Always);
 
-		ImGui::Begin("Startup Menu", nullptr,
-					 ImGuiWindowFlags_NoResize);
+		ImGui::Begin("Startup Menu", nullptr, ImGuiWindowFlags_NoResize);
 
 		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));
 		ImGui::TextWrapped("Select image from your pc");
@@ -200,7 +201,7 @@ void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
 			 f2i(previewX), f2i(previewY - 25), 16, GREEN);
 }
 
-void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
+void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
 {
 	Image fullImage = LoadImage(texturePath.c_str());
 
@@ -228,12 +229,14 @@ void SpriteSheetCutterApp::ExportAllFrames(char *destFileName)
 	frame.width = spriteSheet.width / grid.columns;
 	frame.height = spriteSheet.height / grid.rows;
 
-	const char *savePath = tinyfd_saveFileDialog(
-		"Select folder by saving a dummy file",
+	const char *savePath = tinyfd_saveFileDialog
+	(
+		"Select folder",
 		".png",
 		0,
 		NULL,
-		NULL);
+		NULL
+	);
 
 	if (!savePath)
 		return;

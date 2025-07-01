@@ -68,7 +68,7 @@ private:
 	std::string GetFileFromDialog();
 	void Draw();
 	void RenderUI(float frameW, float frameH);
-	void ExportAllFrames(char *destFileName);
+	void ExportAllFrames(const char *destFileName);
 	void DrawGridOverlay(float frameW, float frameH);
 	void DrawCellHighlight(float sheetW, float sheetH);
 	void DrawEnlargedPreview(float frameW, float frameH);
