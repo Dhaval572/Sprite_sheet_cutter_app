@@ -53,9 +53,12 @@ void SpriteSheetCutterApp::Draw()
 	if (spriteSheet.id != 0)
 	{
 		SetTextureFilter(spriteSheet, TEXTURE_FILTER_POINT);
-		DrawTexturePro(spriteSheet, {0, 0, static_cast<float>(spriteSheet.width), static_cast<float>(spriteSheet.height)},
-					   {display.position.x, display.position.y, spriteSheet.width * display.scale, spriteSheet.height * display.scale},
-					   {0, 0}, 0.0f, WHITE);
+		DrawTexturePro
+		(
+			spriteSheet, {0, 0, static_cast<float>(spriteSheet.width), static_cast<float>(spriteSheet.height)},
+			{display.position.x, display.position.y, spriteSheet.width * display.scale, spriteSheet.height * display.scale},
+			{0, 0}, 0.0f, WHITE
+		);
 
 		DrawGridOverlay(frame.width, frame.height);
 		DrawCellHighlight(frame.width, frame.height);
@@ -72,8 +75,11 @@ void SpriteSheetCutterApp::Draw()
 	{
 		ImGuiIO &io = ImGui::GetIO();
 		ImVec2 windowSize(300, 220);
-		ImVec2 centerPos = ImVec2((io.DisplaySize.x - windowSize.x) * 0.5f,
-								  (io.DisplaySize.y - windowSize.y) * 0.5f);
+		ImVec2 centerPos = ImVec2
+		(
+			(io.DisplaySize.x - windowSize.x) * 0.5f,
+			(io.DisplaySize.y - windowSize.y) * 0.5f
+		);
 
 		ImGui::SetNextWindowPos(centerPos, ImGuiCond_Always);
 		ImGui::SetNextWindowSize(windowSize, ImGuiCond_Always);
@@ -135,7 +141,10 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
-		DrawLineEx({x, display.position.y}, {x, display.position.y + frame.displayH}, thickness, color);
+		DrawLineEx
+		(
+			{x, display.position.y}, {x, display.position.y + frame.displayH}, thickness, color
+		);
 	}
 
 	for (int r = 0; r <= grid.rows; r++)
@@ -145,7 +154,12 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
 
 		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
-		DrawLineEx({display.position.x, y}, {display.position.x + frame.displayW, y}, thickness, color);
+		DrawLineEx
+		(
+			{display.position.x, y}, 
+			{display.position.x + frame.displayW, y},
+			thickness, color
+		);
 	}
 
 	int cellNumber;
@@ -158,7 +172,10 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 				cellNumber = r * grid.columns + c;
 				x = display.position.x + c * frame.gridX + 5;
 				y = display.position.y + r * frame.gridY + 5;
-				DrawText(TextFormat("%d", cellNumber), f2i(x), f2i(y), 12, LIGHTGRAY);
+				DrawText
+				(
+					TextFormat("%d", cellNumber), f2i(x), f2i(y), 12, LIGHTGRAY
+				);
 			}
 		}
 	}
@@ -178,10 +195,25 @@ void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 	Rectangle highlight = {x, y, frame.gridX, frame.gridY};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
-	DrawRectangle(f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x + frame.gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
-	DrawRectangle(f2i(x + frame.gridX - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED);
+	DrawRectangle
+	(
+		f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+	);
+
+	DrawRectangle
+	(
+		f2i(x + frame.gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+	);
+
+	DrawRectangle
+	(
+		f2i(x - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+	);
+
+	DrawRectangle
+	(
+		f2i(x + frame.gridX - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+	);
 }
 
 void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
@@ -190,15 +222,17 @@ void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
 	Rectangle src = GetFrameRect(selection.row, selection.col, frameW, frameH);
 	previewW = frameW * display.previewScale;
 	previewH = frameH * display.previewScale;
-	previewX = GetScreenWidth() - previewW - 50;
-	previewY = GetScreenHeight() - previewH - 50;
+	previewX = GetScreenWidth() - previewW - 50;  // 50 padding from right side
+	previewY = GetScreenHeight() - previewH - 50; // 50 padding from bottom side
 
 	Rectangle dest = {previewX, previewY, previewW, previewH};
 	DrawRectangleRec(dest, Color{0, 0, 0, 200});
 	DrawTexturePro(spriteSheet, src, dest, {0, 0}, 0.0f, WHITE);
 	DrawRectangleLinesEx(dest, 3.0f, GREEN);
-	DrawText(TextFormat("Preview: Cell %d (%.1fx%.1f)", selection.index, frameW, frameH),
-			 f2i(previewX), f2i(previewY - 25), 16, GREEN);
+	DrawText
+	(
+		TextFormat("Preview: Cell %d (%.1fx%.1f)", selection.index, frameW, frameH), f2i(previewX), f2i(previewY - 25), 16, GREEN
+	);
 }
 
 void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
