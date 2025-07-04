@@ -277,9 +277,7 @@ void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
 	if (!savePath)
 		return;
 
-	std::string fullPath = savePath;
-	int lastSlash = fullPath.find_last_of("/\\");
-	std::string folderPath = (lastSlash == std::string::npos) ? "." : fullPath.substr(0, lastSlash);
+	std::string folderPath = fs::path(savePath).parent_path().string();
 
 	int frameIdx = 0;
 	for (int r = 0; r < grid.rows; r++)
