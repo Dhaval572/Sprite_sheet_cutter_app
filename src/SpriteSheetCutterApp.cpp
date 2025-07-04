@@ -8,7 +8,10 @@ SpriteSheetCutterApp::SpriteSheetCutterApp()
 
 std::string SpriteSheetCutterApp::GetFileFromDialog()
 {
-	static const char *fileTypes[] = {"*.png", "*.jpg", "*.jpeg", "*.bmp"};
+	static const char *fileTypes[] = 
+	{
+		"*.png", "*.jpg", "*.jpeg", "*.bmp"
+	};
 
 	const char *result = tinyfd_openFileDialog
 	(
@@ -55,8 +58,20 @@ void SpriteSheetCutterApp::Draw()
 		SetTextureFilter(spriteSheet, TEXTURE_FILTER_POINT);
 		DrawTexturePro
 		(
-			spriteSheet, {0, 0, static_cast<float>(spriteSheet.width), static_cast<float>(spriteSheet.height)},
-			{display.position.x, display.position.y, spriteSheet.width * display.scale, spriteSheet.height * display.scale},
+			spriteSheet, 
+			// Source rect
+			{
+				0, 0, 
+				static_cast<float>(spriteSheet.width), 
+				static_cast<float>(spriteSheet.height)
+			},
+			// Original rect
+			{
+				display.position.x, 
+				display.position.y, 
+				spriteSheet.width * display.scale, 
+				spriteSheet.height * display.scale
+			},
 			{0, 0}, 0.0f, WHITE
 		);
 
@@ -110,7 +125,11 @@ void SpriteSheetCutterApp::Draw()
 
 		if (!texturePath.empty() && spriteSheet.id == 0)
 		{
-			ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to load texture!\n Please select an image file only.");
+			ImGui::TextColored
+			(
+				ImVec4(1, 0, 0, 1), 
+				"Failed to load texture!\n Please select an image file only."
+			);
 			ImGui::Text("Path: %s", texturePath.c_str());
 		}
 	}
@@ -177,7 +196,8 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 				y = display.position.y + r * frame.gridY + 5;
 				DrawText
 				(
-					TextFormat("%d", cellNumber), f2i(x), f2i(y), 12, LIGHTGRAY
+					TextFormat("%d", cellNumber), 
+					f2i(x), f2i(y), 12, LIGHTGRAY
 				);
 			}
 		}
@@ -234,7 +254,11 @@ void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
 	DrawRectangleLinesEx(dest, 3.0f, GREEN);
 	DrawText
 	(
-		TextFormat("Preview: Cell %d (%.1fx%.1f)", selection.index, frameW, frameH), f2i(previewX), f2i(previewY - 25), 16, GREEN
+		TextFormat
+		(
+			"Preview: Cell %d (%.1fx%.1f)", selection.index, frameW, frameH
+		), 
+		f2i(previewX), f2i(previewY - 25), 16, GREEN
 	);
 }
 
