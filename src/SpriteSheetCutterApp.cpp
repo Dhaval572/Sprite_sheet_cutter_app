@@ -95,6 +95,7 @@ void SpriteSheetCutterApp::Draw()
 		ImGui::NewLine();
 		ImGui::NewLine();
 		ImGui::NewLine();
+
 		ImGui::SameLine(0.0f, 90.0f);
 		if (ImGui::Button("Load Sprite"))
 		{
@@ -278,7 +279,6 @@ void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
 		return;
 
 	std::string folderPath = fs::path(savePath).parent_path().string();
-
 	int frameIdx = 0;
 	for (int r = 0; r < grid.rows; r++)
 	{
