@@ -143,7 +143,9 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
 		DrawLineEx
 		(
-			{x, display.position.y}, {x, display.position.y + frame.displayH}, thickness, color
+			{x, display.position.y},
+			{x, display.position.y + frame.displayH},
+			thickness, color
 		);
 	}
 
@@ -248,7 +250,7 @@ void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
 
 	if (ImGui::BeginPopupModal("Export Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
-		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Failed to load image for export!");
+		ImGui::TextColored(ImVec4(1, 0, 0, 1), "	Failed to load image for export!");
 		ImGui::Text("Check if the file exists at:\n%s", texturePath.c_str());
 
 		ImGui::Separator();
