@@ -332,7 +332,7 @@ void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
 	ImGui::Checkbox("Show Grid", &grid.showGrid);
 	ImGui::SliderFloat("Main Scale", &display.scale, 1.0f, 3.0f);
 	ImGui::SliderFloat("Preview Scale", &display.previewScale, 1.0f, 10.0f);
-	ImGui::DragFloat2("Position", (float *)&display.position, 1.0f, 0.0f, 0.0f, "%.1f");
+	ImGui::InputFloat2("Position", (float *)&display.position, "%.1f");
 
 	selection.totalCells = grid.rows * grid.columns;
 	selection.index = std::clamp(selection.index, 0, selection.totalCells - 1);
