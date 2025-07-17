@@ -15,14 +15,6 @@ A simple and intuitive tool to **view**, **cut**, and **export** individual fram
 
 ---
 
-## 🛠 Getting Started
-
-### Prerequisites
-
-- **Visual Studio 2019** (or later)  
-- **CMake** (bundled with Visual Studio)  
-- A C++17‑capable compiler  
-
 ### Running the Project
 
 1. **Open the Folder**  
@@ -67,22 +59,4 @@ A simple and intuitive tool to **view**, **cut**, and **export** individual fram
 | **Main / Preview Scale** | Zoom sliders for the main canvas and preview pane.  |
 | **Reset Position**       | Re-center the main canvas view.                     |
 | **Save All Frames**      | Export every cell as an individual PNG file.        |
-
 ---
-
-## 📁 Output
-
-- Exported frames are saved as `frame_<row>_<col>.png` by default.  
-- Use your system’s file dialog to pick any save location.
-
----
-
-## 🙌 Contributing
-
-Feel free to open issues or submit pull requests. Please ensure any new code adheres to C++17 standards and is properly documented.
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).  
