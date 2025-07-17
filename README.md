@@ -2,7 +2,7 @@
 
 A simple and intuitive tool to **view**, **cut**, and **export** individual frames from a sprite sheet.
 
-![Sprite Sheet Cutter Screenshot](assets/Screenshot/Screenshot_1.png)
+![Sprite Sheet Cutter Screenshot](assets/Screenshots/Screenshot_1.png)
 
 ---
 
