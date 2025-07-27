@@ -35,6 +35,9 @@ void SpriteSheetCutterApp::run()
 {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(1200, 700, "Sprite Sheet Splitter");
+	Image icon = LoadImage("assets/Screenshots/App_icon.png");
+	SetWindowIcon(icon);
+	UnloadImage(icon);
 	SetTargetFPS(120);
 	rlImGuiSetup(true);
 	ImCustomTheme();
