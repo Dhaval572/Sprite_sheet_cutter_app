@@ -31,8 +31,15 @@ if(EXISTS "${CMAKE_SOURCE_DIR}/assets")
     file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
 endif()
 
+set(APP_ICON ${CMAKE_SOURCE_DIR}/App_icon.rc)
 # Create executable
-add_executable(main ${PROJECT_SRC_CPP} ${RLIMGUI_SRC} ${IMGUI_SRC} ${TINYFILEDIALOGS})
+add_executable(
+    main ${PROJECT_SRC_CPP} 
+    ${RLIMGUI_SRC} 
+    ${IMGUI_SRC} 
+    ${TINYFILEDIALOGS}
+    ${APP_ICON}
+)
 
 # Add include directories — this is what lets you include .hpp/.h files
 target_include_directories(main PRIVATE 
