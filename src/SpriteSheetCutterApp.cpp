@@ -2,31 +2,31 @@
 
 SpriteSheetCutterApp::SpriteSheetCutterApp()
 {
-	texturePath = "";
-	exportFailed = false;
+	m_TexturePath = "";
+	m_bExportFailed = false;
 }
 
 std::string SpriteSheetCutterApp::GetFileFromDialog()
 {
-	static const char *fileTypes[] = 
+	static const char *FILE_TYPES[] = 
 	{
 		"*.png", "*.jpg", "*.jpeg", "*.bmp"
 	};
 
-	const char *result = tinyfd_openFileDialog
+	const char *RESULT = tinyfd_openFileDialog
 	(
 		"Select an image",
 		"",
 		4,
-		fileTypes,
+		FILE_TYPES,
 		"Image files",
 		0
 	);
 
-	if (result != nullptr)
+	if (RESULT != nullptr)
 	{
-		texturePath = std::string(result);
-		return texturePath;
+		m_TexturePath = std::string(RESULT);
+		return m_TexturePath;
 	}
 	return "";
 }
@@ -50,57 +50,57 @@ void SpriteSheetCutterApp::run()
 
 void SpriteSheetCutterApp::Draw()
 {
-	frame.width = spriteSheet.width / static_cast<float>(grid.columns);
-	frame.height = spriteSheet.height / static_cast<float>(grid.rows);
+	m_Frame.width = m_SpriteSheet.width / static_cast<float>(m_Grid.columns);
+	m_Frame.height = m_SpriteSheet.height / static_cast<float>(m_Grid.rows);
 
 	BeginDrawing();
 	ClearBackground(GRAY);
 
-	if (spriteSheet.id != 0)
+	if (m_SpriteSheet.id != 0)
 	{
-		SetTextureFilter(spriteSheet, TEXTURE_FILTER_POINT);
+		SetTextureFilter(m_SpriteSheet, TEXTURE_FILTER_POINT);
 		DrawTexturePro
 		(
-			spriteSheet, 
+			m_SpriteSheet, 
 			// Source rect
 			{
 				0, 0, 
-				static_cast<float>(spriteSheet.width), 
-				static_cast<float>(spriteSheet.height)
+				static_cast<float>(m_SpriteSheet.width), 
+				static_cast<float>(m_SpriteSheet.height)
 			},
 			// Original rect
 			{
-				display.position.x, 
-				display.position.y, 
-				spriteSheet.width * display.scale, 
-				spriteSheet.height * display.scale
+				m_Display.position.x, 
+				m_Display.position.y, 
+				m_SpriteSheet.width * m_Display.scale, 
+				m_SpriteSheet.height * m_Display.scale
 			},
 			{0, 0}, 0.0f, WHITE
 		);
 
-		DrawGridOverlay(frame.width, frame.height);
-		DrawCellHighlight(frame.width, frame.height);
-		DrawEnlargedPreview(frame.width, frame.height);
+		DrawGridOverlay(m_Frame.width, m_Frame.height);
+		DrawCellHighlight(m_Frame.width, m_Frame.height);
+		DrawEnlargedPreview(m_Frame.width, m_Frame.height);
 	}
 
 	rlImGuiBegin();
 
-	if (spriteSheet.id != 0)
+	if (m_SpriteSheet.id != 0)
 	{
-		RenderUI(frame.width, frame.height);
+		RenderUI(m_Frame.width, m_Frame.height);
 	}
 	else
 	{
 		ImGuiIO &io = ImGui::GetIO();
-		ImVec2 windowSize(300, 220);
-		ImVec2 centerPos = ImVec2
+		ImVec2 window_size(300, 220);
+		ImVec2 center_pos = ImVec2
 		(
-			(io.DisplaySize.x - windowSize.x) * 0.5f,
-			(io.DisplaySize.y - windowSize.y) * 0.5f
+			(io.DisplaySize.x - window_size.x) * 0.5f,
+			(io.DisplaySize.y - window_size.y) * 0.5f
 		);
 
-		ImGui::SetNextWindowPos(centerPos, ImGuiCond_Always);
-		ImGui::SetNextWindowSize(windowSize, ImGuiCond_Always);
+		ImGui::SetNextWindowPos(center_pos, ImGuiCond_Always);
+		ImGui::SetNextWindowSize(window_size, ImGuiCond_Always);
 
 		ImGui::Begin("Startup Menu", nullptr, ImGuiWindowFlags_NoResize);
 
@@ -117,23 +117,23 @@ void SpriteSheetCutterApp::Draw()
 		ImGui::SameLine(0.0f, 90.0f);
 		if (ImGui::Button("Load Sprite"))
 		{
-			std::string selectedPath = GetFileFromDialog();
-			if (!selectedPath.empty())
+			std::string selected_path = GetFileFromDialog();
+			if (!selected_path.empty())
 			{
-				spriteSheet = LoadTexture(selectedPath.c_str());
+				m_SpriteSheet = LoadTexture(selected_path.c_str());
 			}
 		}
 
 		ImGui::End();
 
-		if (!texturePath.empty() && spriteSheet.id == 0)
+		if (!m_TexturePath.empty() && m_SpriteSheet.id == 0)
 		{
 			ImGui::TextColored
 			(
 				ImVec4(1, 0, 0, 1), 
 				"Failed to load texture!\n Please select an image file only."
 			);
-			ImGui::Text("Path: %s", texturePath.c_str());
+			ImGui::Text("Path: %s", m_TexturePath.c_str());
 		}
 	}
 
@@ -141,66 +141,81 @@ void SpriteSheetCutterApp::Draw()
 	EndDrawing();
 }
 
-Rectangle SpriteSheetCutterApp::GetFrameRect(int row, int col, float frameW, float frameH)
+Rectangle SpriteSheetCutterApp::GetFrameRect
+(
+	int row, int col, float frame_w, float frame_h
+)
 {
-	return Rectangle{col * frameW, row * frameH, frameW, frameH};
+	return Rectangle
+	{
+		col * frame_w, 
+		row * frame_h, 
+		frame_w, 
+		frame_h
+	};
 }
 
-void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
+void SpriteSheetCutterApp::DrawGridOverlay(float frame_w, float frame_h)
 {
-	if (!grid.showGrid || grid.rows < 1 || grid.columns < 1)
+	if (!m_Grid.b_ShowGrid || m_Grid.rows < 1 || m_Grid.columns < 1)
 		return;
 
 	float x, y, thickness;
-	frame.displayW = spriteSheet.width * display.scale;
-	frame.displayH = spriteSheet.height * display.scale;
-	frame.gridX = frame.displayW / grid.columns;
-	frame.gridY = frame.displayH / grid.rows;
+	m_Frame.display_w = m_SpriteSheet.width * m_Display.scale;
+	m_Frame.display_h = m_SpriteSheet.height * m_Display.scale;
+	m_Frame.grid_x = m_Frame.display_w / m_Grid.columns;
+	m_Frame.grid_y = m_Frame.display_h / m_Grid.rows;
 
-	for (int c = 0; c <= grid.columns; c++)
+	for (int c = 0; c <= m_Grid.columns; c++)
 	{
-		x = display.position.x + c * frame.gridX;
+		x = m_Display.position.x + c * m_Frame.grid_x;
 
-		thickness = (c == 0 || c == grid.columns) ? grid.lineThickness + 1 : grid.lineThickness;
+		thickness = (c == 0 || c == m_Grid.columns) ? 
+			m_Grid.line_thickness + 1 : m_Grid.line_thickness;
 
-		Color color = (c == 0 || c == grid.columns) ? YELLOW : WHITE;
+		Color color = (c == 0 || c == m_Grid.columns) ? YELLOW : WHITE;
 		DrawLineEx
 		(
-			{x, display.position.y},
-			{x, display.position.y + frame.displayH},
+			{x, m_Display.position.y},
+			{x, m_Display.position.y + m_Frame.display_h},
+			thickness, 
+			color
+		);
+	}
+
+	for (int r = 0; r <= m_Grid.rows; r++)
+	{
+		y = m_Display.position.y + r * m_Frame.grid_y;
+
+		thickness = (r == 0 || r == m_Grid.rows) ? 
+			m_Grid.line_thickness + 1 : m_Grid.line_thickness;
+
+		Color color = (r == 0 || r == m_Grid.rows) ? YELLOW : WHITE;
+		DrawLineEx
+		(
+			{m_Display.position.x, y}, 
+			{m_Display.position.x + m_Frame.display_w, y},
 			thickness, color
 		);
 	}
 
-	for (int r = 0; r <= grid.rows; r++)
+	int cell_number;
+	if (m_Display.b_ShowCellInfo)
 	{
-		y = display.position.y + r * frame.gridY;
-
-		thickness = (r == 0 || r == grid.rows) ? grid.lineThickness + 1 : grid.lineThickness;
-
-		Color color = (r == 0 || r == grid.rows) ? YELLOW : WHITE;
-		DrawLineEx
-		(
-			{display.position.x, y}, 
-			{display.position.x + frame.displayW, y},
-			thickness, color
-		);
-	}
-
-	int cellNumber;
-	if (display.showCellInfo)
-	{
-		for (int r = 0; r < grid.rows; r++)
+		for (int r = 0; r < m_Grid.rows; r++)
 		{
-			for (int c = 0; c < grid.columns; c++)
+			for (int c = 0; c < m_Grid.columns; c++)
 			{
-				cellNumber = r * grid.columns + c;
-				x = display.position.x + c * frame.gridX + 5;
-				y = display.position.y + r * frame.gridY + 5;
+				cell_number = r * m_Grid.columns + c;
+				x = m_Display.position.x + c * m_Frame.grid_x + 5;
+				y = m_Display.position.y + r * m_Frame.grid_y + 5;
 				DrawText
 				(
-					TextFormat("%d", cellNumber), 
-					f2i(x), f2i(y), 12, LIGHTGRAY
+					TextFormat("%d", cell_number), 
+					f2i(x), 
+					f2i(y), 
+					12, 
+					LIGHTGRAY
 				);
 			}
 		}
@@ -209,91 +224,129 @@ void SpriteSheetCutterApp::DrawGridOverlay(float frameW, float frameH)
 
 void SpriteSheetCutterApp::DrawCellHighlight(float sheetW, float sheetH)
 {
-	float x, y, markerSize = 8.0f;
-	if (grid.rows <= 0 || grid.columns <= 0)
-		return;
+	float x, y, marker_size = 8.0f;
+	if (m_Grid.rows <= 0 || m_Grid.columns <= 0) return;
 
-	frame.gridX = (spriteSheet.width * display.scale) / grid.columns;
-	frame.gridY = (spriteSheet.height * display.scale) / grid.rows;
-	x = display.position.x + selection.col * frame.gridX;
-	y = display.position.y + selection.row * frame.gridY;
+	m_Frame.grid_x = (m_SpriteSheet.width * m_Display.scale) / m_Grid.columns;
+	m_Frame.grid_y = (m_SpriteSheet.height * m_Display.scale) / m_Grid.rows;
+	x = m_Display.position.x + m_Selection.col * m_Frame.grid_x;
+	y = m_Display.position.y + m_Selection.row * m_Frame.grid_y;
 
-	Rectangle highlight = {x, y, frame.gridX, frame.gridY};
+	Rectangle highlight = {x, y, m_Frame.grid_x, m_Frame.grid_y};
 
 	DrawRectangleLinesEx(highlight, 3.0f, RED);
 	DrawRectangle
 	(
-		f2i(x - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+		f2i(x - marker_size / 2), 
+		f2i(y - marker_size / 2), 
+		f2i(marker_size), 
+		f2i(marker_size), 
+		RED
 	);
 
 	DrawRectangle
 	(
-		f2i(x + frame.gridX - markerSize / 2), f2i(y - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+		f2i(x + m_Frame.grid_x - marker_size / 2), 
+		f2i(y - marker_size / 2), 
+		f2i(marker_size), 
+		f2i(marker_size), 
+		RED	
 	);
 
 	DrawRectangle
 	(
-		f2i(x - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+		f2i(x - marker_size / 2), 
+		f2i(y + m_Frame.grid_y - marker_size / 2), 
+		f2i(marker_size), 
+		f2i(marker_size), 
+		RED
 	);
 
 	DrawRectangle
 	(
-		f2i(x + frame.gridX - markerSize / 2), f2i(y + frame.gridY - markerSize / 2), f2i(markerSize), f2i(markerSize), RED
+		f2i(x + m_Frame.grid_x - marker_size / 2), 
+		f2i(y + m_Frame.grid_y - marker_size / 2), 
+		f2i(marker_size), 
+		f2i(marker_size), 
+		RED
 	);
 }
 
-void SpriteSheetCutterApp::DrawEnlargedPreview(float frameW, float frameH)
+void SpriteSheetCutterApp::DrawEnlargedPreview(float frame_w, float frame_h)
 {
-	float previewW, previewH, previewX, previewY;
-	Rectangle src = GetFrameRect(selection.row, selection.col, frameW, frameH);
-	previewW = frameW * display.previewScale;
-	previewH = frameH * display.previewScale;
-	previewX = GetScreenWidth() - previewW - 50;  // 50 padding from right side
-	previewY = GetScreenHeight() - previewH - 50; // 50 padding from bottom side
+	float preview_w, preview_h, preview_x, preview_y;
+	Rectangle src = GetFrameRect
+	(
+		m_Selection.row, 
+		m_Selection.col, 
+		frame_w, 
+		frame_h
+	);
+	preview_w = frame_w * m_Display.preview_scale;
+	preview_h = frame_h * m_Display.preview_scale;
 
-	Rectangle dest = {previewX, previewY, previewW, previewH};
+	// 50 padding from right and bottom side
+	preview_x = GetScreenWidth() - preview_w - 50;  
+	preview_y = GetScreenHeight() - preview_h - 50; 
+
+	Rectangle dest = {preview_x, preview_y, preview_w, preview_h};
 	DrawRectangleRec(dest, Color{0, 0, 0, 200});
-	DrawTexturePro(spriteSheet, src, dest, {0, 0}, 0.0f, WHITE);
+	DrawTexturePro(m_SpriteSheet, src, dest, {0, 0}, 0.0f, WHITE);
 	DrawRectangleLinesEx(dest, 3.0f, GREEN);
 	DrawText
 	(
 		TextFormat
 		(
-			"Preview: Cell %d (%.1fx%.1f)", selection.index, frameW, frameH
+			"Preview: Cell %d (%.1fx%.1f)", 
+			m_Selection.index, 
+			frame_w, 
+			frame_h
 		), 
-		f2i(previewX), f2i(previewY - 25), 16, GREEN
+		f2i(preview_x), f2i(preview_y - 25), 16, GREEN
 	);
 }
 
-void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
+void SpriteSheetCutterApp::ExportAllFrames(const char *dest_file_name)
 {
-	Image fullImage = LoadImage(texturePath.c_str());
+	Image full_image = LoadImage(m_TexturePath.c_str());
 
-	if (fullImage.data == nullptr)
+	if (full_image.data == nullptr)
 	{
-		exportFailed = true;
+		m_bExportFailed = true;
 		ImGui::OpenPopup("Export Failed");
 		return;
 	}
 
-	if (ImGui::BeginPopupModal("Export Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	if 
+	(
+		ImGui::BeginPopupModal
+		(
+			"Export Failed", 
+			NULL,
+			ImGuiWindowFlags_AlwaysAutoResize
+		)
+	)
 	{
-		ImGui::TextColored(ImVec4(1, 0, 0, 1), "	Failed to load image for export!");
-		ImGui::Text("Check if the file exists at:\n%s", texturePath.c_str());
+		ImGui::TextColored
+		(
+			ImVec4(1, 0, 0, 1), 
+			"	Failed to load image for export!"
+		);
+		ImGui::Text("Check if the file exists at:\n%s", m_TexturePath.c_str());
 
 		ImGui::Separator();
 		if (ImGui::Button("OK"))
 		{
-			exportFailed = false;
+			m_bExportFailed = false;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::EndPopup();
 	}
 
-	frame.width = spriteSheet.width / grid.columns;
-	frame.height = spriteSheet.height / grid.rows;
+	m_Frame.width = m_SpriteSheet.width / m_Grid.columns;
+	m_Frame.height = m_SpriteSheet.height / m_Grid.rows;
 
-	const char *savePath = tinyfd_saveFileDialog
+	const char *save_path = tinyfd_saveFileDialog
 	(
 		"Select folder",
 		".png",
@@ -302,126 +355,196 @@ void SpriteSheetCutterApp::ExportAllFrames(const char *destFileName)
 		NULL
 	);
 
-	if (!savePath)
-		return;
+	if (!save_path) return;
 
-	std::string folderPath = fs::path(savePath).parent_path().string();
-	int frameIdx = 0;
-	for (int r = 0; r < grid.rows; r++)
+	std::string folder_path = fs::path(save_path).parent_path().string();
+	int frame_idx = 0;
+	for (int r = 0; r < m_Grid.rows; r++)
 	{
-		for (int c = 0; c < grid.columns; c++)
+		for (int c = 0; c < m_Grid.columns; c++)
 		{
-			Rectangle cropRect = GetFrameRect(r, c, static_cast<float>(frame.width), static_cast<float>(frame.height));
-			Image frameImage = ImageFromImage(fullImage, cropRect);
+			Rectangle crop_rect = GetFrameRect
+			(
+				r, 
+				c, 
+				static_cast<float>(m_Frame.width), 
+				static_cast<float>(m_Frame.height)
+			);
+			Image frame_image = ImageFromImage(full_image, crop_rect);
 
-			std::string filename = folderPath + "/" + destFileName + "_(" + std::to_string(frameIdx) + ").png";
+			std::string filename = folder_path + "/" + dest_file_name + "_(" + std::to_string(frame_idx) + ").png";
 
-			ExportImage(frameImage, filename.c_str());
-			UnloadImage(frameImage);
-			frameIdx++;
+			ExportImage(frame_image, filename.c_str());
+			UnloadImage(frame_image);
+			frame_idx++;
 		}
 	}
 
-	UnloadImage(fullImage);
+	UnloadImage(full_image);
 }
 
-void SpriteSheetCutterApp::RenderUI(float frameW, float frameH)
+void SpriteSheetCutterApp::RenderUI(float frame_w, float frame_h)
 {
-	float maxW, maxH;
-	static bool save = false;
-	static bool showInputBox = false;
-	static char destFileName[256] = "";
-	ImGui::Begin("Sprite Sheet Splitter", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-	ImGui::Text("Sprite Sheet: %dx%d pixels", spriteSheet.width, spriteSheet.height);
+	float max_w, max_h;
+	static bool s_bSave = false;
+	static bool s_bShowInputBox = false;
+	static char s_bDestFileName[256] = "";
+	ImGui::Begin
+	(
+		"Sprite Sheet Splitter", 
+		nullptr, 
+		ImGuiWindowFlags_AlwaysAutoResize
+	);
+	ImGui::Text
+	(
+		"Sprite Sheet: %dx%d pixels", 
+		m_SpriteSheet.width, 
+		m_SpriteSheet.height
+	);
 	ImGui::SameLine(0.0f, 120.0f);
 	if (ImGui::Button("Load new SpriteSheet"))
 	{
-		std::string selectedPath = GetFileFromDialog();
-		if (!selectedPath.empty())
+		std::string selected_path = GetFileFromDialog();
+		if (!selected_path.empty())
 		{
 			// Unload previous
-			if (spriteSheet.id != 0)
-				UnloadTexture(spriteSheet);
+			if (m_SpriteSheet.id != 0)
+			{
+				UnloadTexture(m_SpriteSheet);
+			}
 
 			// Load new
-			spriteSheet = LoadTexture(texturePath.c_str());
+			m_SpriteSheet = LoadTexture(m_TexturePath.c_str());
 		}
 	}
-	ImGui::Checkbox("Show Cell Info", &display.showCellInfo);
-	ImGui::SliderFloat("Grid Line Thickness", &grid.lineThickness, 0.5f, 5.0f);
+	ImGui::Checkbox("Show Cell Info", &m_Display.b_ShowCellInfo);
+	ImGui::SliderFloat
+	(
+		"Grid Line Thickness", 
+		&m_Grid.line_thickness, 
+		0.5f, 
+		5.0f
+	);
 
-	if (ImGui::InputInt("Rows", &grid.rows))
-		grid.rows = std::clamp(grid.rows, 1, 50);
-
-	if (ImGui::InputInt("Columns", &grid.columns))
-		grid.columns = std::clamp(grid.columns, 1, 50);
-
-	ImGui::Checkbox("Show Grid", &grid.showGrid);
-	ImGui::SliderFloat("Main Scale", &display.scale, 1.0f, 3.0f);
-	ImGui::SliderFloat("Preview Scale", &display.previewScale, 1.0f, 10.0f);
-	ImGui::InputFloat2("Position", (float *)&display.position, "%.1f");
-
-	selection.totalCells = grid.rows * grid.columns;
-	selection.index = std::clamp(selection.index, 0, selection.totalCells - 1);
-	selection.row = selection.index / grid.columns;
-	selection.col = selection.index % grid.columns;
-
-	if (ImGui::SliderInt("Select Cell", &selection.index, 0, selection.totalCells - 1))
+	if (ImGui::InputInt("Rows", &m_Grid.rows))
 	{
-		selection.row = selection.index / grid.columns;
-		selection.col = selection.index % grid.columns;
+		m_Grid.rows = std::clamp(m_Grid.rows, 1, 50);
 	}
-	if (ImGui::SliderInt("Row", &selection.row, 0, grid.rows - 1))
-		selection.index = selection.row * grid.columns + selection.col;
 
-	if (ImGui::SliderInt("Column", &selection.col, 0, grid.columns - 1))
-		selection.index = selection.row * grid.columns + selection.col;
+	if (ImGui::InputInt("Columns", &m_Grid.columns))
+	{
+		m_Grid.columns = std::clamp(m_Grid.columns, 1, 50);
+	}
 
-	ImGui::Text("Cell: %d (Row %d, Col %d)", selection.index, selection.row, selection.col);
-	ImGui::Text("Frame: %.1f x %.1f", frameW, frameH);
-	ImGui::Text("Display: %.1f x %.1f", frameW * display.scale, frameH * display.scale);
-	ImGui::Text("Tex Coords: (%.1f, %.1f)", selection.col * frameW, selection.row * frameH);
+	ImGui::Checkbox("Show Grid", &m_Grid.b_ShowGrid);
+	ImGui::SliderFloat("Main Scale", &m_Display.scale, 1.0f, 3.0f);
+	ImGui::SliderFloat("Preview Scale", &m_Display.preview_scale, 1.0f, 10.0f);
+	ImGui::InputFloat2("Position", (float *)&m_Display.position, "%.1f");
+
+	m_Selection.total_cells = m_Grid.rows * m_Grid.columns;
+	m_Selection.index = std::clamp
+	(
+		m_Selection.index, 
+		0, 
+		m_Selection.total_cells - 1
+	);
+	m_Selection.row = m_Selection.index / m_Grid.columns;
+	m_Selection.col = m_Selection.index % m_Grid.columns;
+
+	if 
+	(
+		ImGui::SliderInt
+		(
+			"Select Cell", 
+			&m_Selection.index, 
+			0, 
+			m_Selection.total_cells - 1
+		)
+	)
+	{
+		m_Selection.row = m_Selection.index / m_Grid.columns;
+		m_Selection.col = m_Selection.index % m_Grid.columns;
+	}
+	if (ImGui::SliderInt("Row", &m_Selection.row, 0, m_Grid.rows - 1))
+	{
+		m_Selection.index = m_Selection.row * m_Grid.columns + m_Selection.col;
+	}
+
+	if (ImGui::SliderInt("Column", &m_Selection.col, 0, m_Grid.columns - 1))
+	{
+		m_Selection.index = m_Selection.row * m_Grid.columns + m_Selection.col;
+	}
+
+	ImGui::Text
+	(
+		"Cell: %d (Row %d, Col %d)", 
+		m_Selection.index, 
+		m_Selection.row, 
+		m_Selection.col
+	);
+	ImGui::Text("Frame: %.1f x %.1f", frame_w, frame_h);
+	ImGui::Text
+	(
+		"Display: %.1f x %.1f", 
+		frame_w * m_Display.scale, 
+		frame_h * m_Display.scale
+	);
+	ImGui::Text
+	(
+		"Tex Coords: (%.1f, %.1f)", 
+		m_Selection.col * frame_w, 
+		m_Selection.row * frame_h
+	);
 
 	if (ImGui::Button("Reset Position"))
 	{
-		display.position = {50, 50};
-		display.scale = 1.0f;
+		m_Display.position = {50, 50};
+		m_Display.scale = 1.0f;
 	}
 
 	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Fit to Window"))
 	{
-		maxW = static_cast<float>(GetScreenWidth()) - 400.0f;
-		maxH = static_cast<float>(GetScreenHeight()) - 150.0f;
+		max_w = static_cast<float>(GetScreenWidth()) - 400.0f;
+		max_h = static_cast<float>(GetScreenHeight()) - 150.0f;
 
-		display.scale = std::min(maxW / spriteSheet.width, maxH / spriteSheet.height);
-		display.position = {50, 50};
+		m_Display.scale = std::min
+		(
+			max_w / m_SpriteSheet.width, 
+			max_h / m_SpriteSheet.height
+		);
+		m_Display.position = {50, 50};
 	}
 
 	ImGui::SameLine(0.0f, 70.0f);
 	if (ImGui::Button("Save All Frames"))
 	{
-		showInputBox = true;
+		s_bShowInputBox = true;
 	}
 
-	if (showInputBox)
+	if (s_bShowInputBox)
 	{
-		ImGui::InputText("Name of the file: ", destFileName, IM_ARRAYSIZE(destFileName));
+		ImGui::InputText
+		(
+			"Name of the file: ", 
+			s_bDestFileName, 
+			IM_ARRAYSIZE(s_bDestFileName)
+		);
 
 		if (ImGui::Button("Confirm Save"))
 		{
-			if (strlen(destFileName) > 0)
+			if (strlen(s_bDestFileName) > 0)
 			{
-				save = true;
-				showInputBox = false;
+				s_bSave = true;
+				s_bShowInputBox = false;
 			}
 		}
 	}
 
-	if (save)
+	if (s_bSave)
 	{
-		ExportAllFrames(destFileName);
-		save = false;
+		ExportAllFrames(s_bDestFileName);
+		s_bSave = false;
 	}
 
 	ImGui::End();
@@ -431,8 +554,10 @@ SpriteSheetCutterApp::~SpriteSheetCutterApp()
 {
 	rlImGuiShutdown();
 
-	if (spriteSheet.id != 0)
-		UnloadTexture(spriteSheet);
+	if (m_SpriteSheet.id != 0)
+	{
+		UnloadTexture(m_SpriteSheet);
+	}
 
 	CloseWindow();
 }

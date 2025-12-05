@@ -14,38 +14,38 @@ namespace fs = std::filesystem;
 constexpr auto f2i = [](float f)
 { return static_cast<int>(f); };
 
-struct GridSettings
+struct t_GridSettings
 {
-	float lineThickness = 1.0f;
+	float line_thickness = 1.0f;
 	int rows = 1;
 	int columns = 1;
-	bool showGrid = true;
+	bool b_ShowGrid = true;
 };
 
-struct CellSelection
+struct t_CellSelection
 {
 	int row = 0;
 	int col = 0;
 	int index = 0;
-	int totalCells;
+	int total_cells;
 };
 
-struct DisplaySettings
+struct t_DisplaySettings
 {
 	Vector2 position = {50, 50};
 	float scale = 1.0f;
-	float previewScale = 1.0f;
-	bool showCellInfo = true;
+	float preview_scale = 1.0f;
+	bool b_ShowCellInfo = true;
 };
 
 struct FrameSize
 {
 	float width;
 	float height;
-	float displayW;
-	float displayH;
-	float gridX;
-	float gridY;
+	float display_w;
+	float display_h;
+	float grid_x;
+	float grid_y;
 };
 
 class SpriteSheetCutterApp
@@ -56,20 +56,20 @@ public:
 	void run();
 
 private:
-	Texture2D spriteSheet{};
-	std::string texturePath;
-	GridSettings grid;
-	DisplaySettings display;
-	CellSelection selection;
-	FrameSize frame;
-	bool exportFailed;
+	Texture2D m_SpriteSheet{};
+	std::string m_TexturePath;
+	t_GridSettings m_Grid;
+	t_DisplaySettings m_Display;
+	t_CellSelection m_Selection;
+	FrameSize m_Frame;
+	bool m_bExportFailed;
 
-	Rectangle GetFrameRect(int row, int col, float frameW, float frameH);
+	Rectangle GetFrameRect(int row, int col, float frame_w, float frame_h);
 	std::string GetFileFromDialog();
 	void Draw();
-	void RenderUI(float frameW, float frameH);
-	void ExportAllFrames(const char *destFileName);
-	void DrawGridOverlay(float frameW, float frameH);
-	void DrawCellHighlight(float sheetW, float sheetH);
-	void DrawEnlargedPreview(float frameW, float frameH);
+	void RenderUI(float frame_w, float frame_h);
+	void ExportAllFrames(const char *dest_file_name);
+	void DrawGridOverlay(float frame_w, float frame_h);
+	void DrawCellHighlight(float sheet_w, float sheet_h);
+	void DrawEnlargedPreview(float frameW, float frame_h);
 };
